@@ -1,38 +1,146 @@
 .App {
-  text-align: center;
+    padding: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.App::after {
+    content: "";
+    display: block;
+    clear: both;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.sidebar {
+    width: 450px;
+    float: left;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.output {
+    position: relative;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    padding: 20px;
+    border: 1px dashed #FF89AC;
+    font-size: 28px;
+    font-weight: bolder;
 }
 
-.App-link {
-  color: #61dafb;
+.title {
+    position: relative;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 20px;
+    border-bottom: 1px dashed #FF89AC;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 1;
+    font-style: normal;
+    border: 1px dashed #FF89AC;
+    border-top-width: 0;
+    border-right-width: 0;
+    color: gray;
+    font-weight: 300;
+    cursor: pointer;
+    transition: background-color 0.1s ease-out, color 0.2s ease-out;
 }
+
+.btn:hover {
+    background: #FF89AC;
+    color: black;
+}
+
+.preset {
+    height: 600px;
+    margin-top: 40px;
+    border: 1px dashed #FF89AC;
+}
+
+.preset-ul {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 20px;
+    padding-top: 0;
+    padding-right: 0;
+}
+
+.preset-item {
+    margin-top: 20px;
+    margin-right: 20px;
+    list-style: none;
+    width: 87px;
+    height: 87px;
+    background: #FF89AC;
+}
+
+.stage {
+    float: left;
+    margin-top: 132px;
+    margin-left: 20px;
+    width: 800px;
+    height: 600px;
+    border: 1px dashed #FF89AC;
+}
+
+.canvas {
+    position: relative;
+    margin-top: 43px;
+    width: 800px;
+    height: 450px;
+}
+
+canvas {
+    background-image: repeating-linear-gradient(180deg,
+    #E1E7FF,
+    #E1E7FF 1px,
+    transparent 1px,
+    transparent 6px,
+    transparent 7px), repeating-linear-gradient(90deg,
+    #E1E7FF,
+    #E1E7FF 1px,
+    transparent 1px,
+    transparent 6px,
+    transparent 7px);
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.contr {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #FFF;
+    border: 1px solid #FCE811;
+    border-radius: 50%;
+}
+
+.c1 {
+    background: #91A2FF;
+    top: 45%;
+    left: 55%;
+}
+
+.c3 {
+    background: #C4F184;
+    top: 45%;
+    left: 35%;
+}
+
+.c2 {
+    top: 25%;
+    left: 75%;
+    margin: -10px 0 0 -10px;
+}
+
+.c4 {
+    top: 75%;
+    left: 25%;
+    margin: -10px 0 0 -10px;
+}
+
