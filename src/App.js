@@ -32,7 +32,7 @@ function App() {
           <span className="contr c2"></span>
           <span className="contr c3"></span>
           <span className="contr c4"></span>
-          <canvas width="800" height="450" ></canvas>
+          <canvas width="800" height="537" ></canvas>
         </div>
       </div>
 

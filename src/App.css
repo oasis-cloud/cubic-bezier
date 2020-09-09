@@ -52,6 +52,7 @@
 .btn:hover {
     background: #FF89AC;
     color: black;
+    font-weight: bold;
 }
 
 .preset {
@@ -89,9 +90,9 @@
 
 .canvas {
     position: relative;
-    margin-top: 43px;
+    /*margin-top: 43px;*/
     width: 800px;
-    height: 450px;
+    height: 537px;
 }
 
 canvas {
