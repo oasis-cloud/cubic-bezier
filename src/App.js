@@ -10,15 +10,28 @@ class App extends React.Component {
         const $c2 = document.querySelector(".c2")
         const $c4 = document.querySelector(".c4")
 
+        const $c2w = $c2.offsetWidth
+        const $c2h = $c2.offsetHeight
+
         const ctx = $canvas.getContext('2d');
 
         ctx.beginPath();
-        ctx.moveTo($c2.offsetLeft + 10, $c2.offsetTop + 10);
-        ctx.lineTo($c4.offsetLeft + 10, $c4.offsetTop + 10);
+        ctx.moveTo($c2.offsetLeft + $c2w/2, $c2.offsetTop + $c2h/2);
+        ctx.lineTo($c4.offsetLeft + $c2w/2, $c4.offsetTop + $c2h/2);
         ctx.fill();
+        ctx.lineWidth = 3;//线条的宽度
+        ctx.strokeStyle = "rgba(0,0,0,.1)";//线条的颜色
         ctx.stroke();
 
         // bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y)
+
+        // 设置监听
+        const $c1 = document.querySelector(".c1")
+        const $c3 = document.querySelector(".c3")
+
+        $canvas.addEventListener("mousemove",(e) => {
+            console.log(e.target)
+        }, false)
     }
 
     render() {
