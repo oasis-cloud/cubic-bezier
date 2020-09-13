@@ -1,9 +1,10 @@
 .App {
     padding: 20px;
+    width: 990px;
 }
 
 .App::after {
-    content: "";
+    content: '';
     display: block;
     clear: both;
 }
@@ -19,7 +20,7 @@
     height: 50px;
     line-height: 50px;
     padding: 20px;
-    border: 1px dashed #FF89AC;
+    border: 1px dashed #ff89ac;
     font-size: 28px;
     font-weight: bolder;
 }
@@ -29,7 +30,7 @@
     font-size: 16px;
     font-weight: bold;
     padding: 20px;
-    border-bottom: 1px dashed #FF89AC;
+    border-bottom: 1px dashed #ff89ac;
 }
 
 .btn {
@@ -40,7 +41,7 @@
     font-size: 14px;
     line-height: 1;
     font-style: normal;
-    border: 1px dashed #FF89AC;
+    border: 1px dashed #ff89ac;
     border-top-width: 0;
     border-right-width: 0;
     color: gray;
@@ -50,7 +51,7 @@
 }
 
 .btn:hover {
-    background: #FF89AC;
+    background: #ff89ac;
     color: black;
     font-weight: bold;
 }
@@ -58,7 +59,7 @@
 .preset {
     height: 600px;
     margin-top: 40px;
-    border: 1px dashed #FF89AC;
+    border: 1px dashed #ff89ac;
 }
 
 .preset-ul {
@@ -76,37 +77,42 @@
     list-style: none;
     width: 87px;
     height: 87px;
-    background: #FF89AC;
+    background: #ff89ac;
 }
 
 .stage {
     float: left;
     margin-top: 132px;
     margin-left: 20px;
-    width: 800px;
+    width: 500px;
     height: 600px;
-    border: 1px dashed #FF89AC;
+    border: 1px dashed #ff89ac;
+}
+
+.canvas-w {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 537px;
 }
 
 .canvas {
     position: relative;
-    /*margin-top: 43px;*/
-    width: 800px;
-    height: 537px;
+
+    width: 500px;
+    height: 500px;
 }
 
 canvas {
-    background-image: repeating-linear-gradient(180deg,
-    #E1E7FF,
-    #E1E7FF 1px,
-    transparent 1px,
-    transparent 6px,
-    transparent 7px), repeating-linear-gradient(90deg,
-    #E1E7FF,
-    #E1E7FF 1px,
-    transparent 1px,
-    transparent 6px,
-    transparent 7px);
+    background-image: repeating-linear-gradient(
+            180deg,
+            #e1e7ff,
+            #e1e7ff 1px,
+            transparent 1px,
+            transparent 7px,
+            transparent 8px
+        ),
+        repeating-linear-gradient(90deg, #e1e7ff, #e1e7ff 1px, transparent 1px, transparent 7px, transparent 8px);
     background-size: 50% 50%;
     background-repeat: no-repeat;
     background-position: center;
@@ -114,21 +120,22 @@ canvas {
 
 .contr {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background: #FFF;
-    border: 1px solid #FCE811;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border: 1px solid #fce811;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 .c1 {
-    background: #91A2FF;
+    background: #FCE811;
     top: 45%;
     left: 55%;
 }
 
 .c3 {
-    background: #C4F184;
+    background: #FCE811;
     top: 45%;
     left: 35%;
 }
@@ -136,12 +143,11 @@ canvas {
 .c2 {
     top: 25%;
     left: 75%;
-    margin: -10px 0 0 -10px;
+    margin: -5px 0 0 -5px;
 }
 
 .c4 {
     top: 75%;
     left: 25%;
-    margin: -10px 0 0 -10px;
+    margin: -5px 0 0 -5px;
 }
-
