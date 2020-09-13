@@ -27,11 +27,13 @@ class App extends React.Component {
         // 因为背景剧中了，所以需要减去背景缩进值来修正鼠标点，绘制控制点则需要加上缩进值，因为控制点相对与canvas定位
         const DValX = e.target.offsetWidth / 4
         const DValY = e.target.offsetHeight / 4
+        const DvalW = this.$obj.c1.offsetWidth / 2
+        const DvalH = this.$obj.c1.offsetHeight / 2
         pageX = pageX - offsetLeft - DValX
         pageY = pageY - offsetTop - DValY
 
         if (this.selectedControl) {
-          this.$obj[this.selectedControl].style = `left:${pageX + DValX}px;top:${pageY + DValY}px`
+          this.$obj[this.selectedControl].style = `left:${pageX + DValX - DvalW}px;top:${pageY + DValY - DvalH}px`
           this.ctx.clearRect(0, 0, 500, 500)
           this.drawSegment()
           this.drawBezierCurveTo()
@@ -112,12 +114,24 @@ class App extends React.Component {
               <em className="btn">复制</em>
             </div>
             <ul className="preset-ul">
-              <li className="preset-item"></li>
-              <li className="preset-item"></li>
-              <li className="preset-item"></li>
-              <li className="preset-item"></li>
-              <li className="preset-item"></li>
-              <li className="preset-item"></li>
+              <li className="preset-item">
+                <em className="is-checked"></em>
+              </li>
+              <li className="preset-item">
+                <em className="is-checked"></em>
+              </li>
+              <li className="preset-item">
+                <em className="is-checked"></em>
+              </li>
+              <li className="preset-item">
+                <em className="is-checked"></em>
+              </li>
+              <li className="preset-item">
+                <em className="is-checked"></em>
+              </li>
+              <li className="preset-item">
+                <em className="is-checked"></em>
+              </li>
             </ul>
           </div>
         </div>
@@ -125,14 +139,23 @@ class App extends React.Component {
         <div className="stage">
           <div className="title">
             <span>控制器</span>
-            <em className="btn">重置</em>
+            <em className="btn">复制</em>
+            <em className="btn btn1">重置控制点(2,4)</em>
           </div>
           <div className="canvas-w">
             <div className="canvas" ref={this.canvasRef}>
-              <span className="contr c1" contr-type="c1"></span>
-              <span className="contr c2" contr-type="c2"></span>
-              <span className="contr c3" contr-type="c3"></span>
-              <span className="contr c4" contr-type="c4"></span>
+              <button className="contr c1" contr-type="c1">
+                1
+              </button>
+              <button className="contr c2" contr-type="c2">
+                2
+              </button>
+              <button className="contr c3" contr-type="c3">
+                3
+              </button>
+              <button className="contr c4" contr-type="c4">
+                4
+              </button>
               <canvas id="canvas" width="500" height="500"></canvas>
             </div>
           </div>
