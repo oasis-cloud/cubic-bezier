@@ -1,11 +1,41 @@
 import React from 'react'
 import './App.css'
 
+function getComputedStyleNoPx($ele, cssProperty) {
+  const cssPropertyVal = window.getComputedStyle(document.querySelector('.c1'))[cssProperty]
+  return parseFloat(cssPropertyVal.match(/[0-9]+/g)[0])
+}
+
+function getWidth($ele) {
+  return $ele.offsetWidth /*+ getComputedStyleNoPx($ele, 'borderWidth') * 2*/
+}
+
+function getHeight($ele) {
+  return $ele.offsetHeight /*+ getComputedStyleNoPx($ele, 'borderWidth') * 2*/
+}
+
+function getHalfWidth($ele) {
+  return getWidth($ele) / 2
+}
+
+function getHalfHeight($ele) {
+  return getHeight($ele) / 2
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.selectedControl = undefined
     this.canvasRef = React.createRef()
+    this.inputCopy = React.createRef()
+    this.state = {
+      pointer: {
+        x: 0,
+        y: 0,
+        x1: 0,
+        y1: 0,
+      },
+    }
   }
 
   componentDidMount() {
@@ -17,6 +47,7 @@ class App extends React.Component {
       c4: document.querySelector('.c4'),
     }
     this.ctx = this.$canvas.getContext('2d')
+    this.calculatePercent()
     this.drawSegment()
     this.drawBezierCurveTo()
     this.$canvas.addEventListener(
@@ -27,16 +58,19 @@ class App extends React.Component {
         // 因为背景剧中了，所以需要减去背景缩进值来修正鼠标点，绘制控制点则需要加上缩进值，因为控制点相对与canvas定位
         const DValX = e.target.offsetWidth / 4
         const DValY = e.target.offsetHeight / 4
-        const DvalW = this.$obj.c1.offsetWidth / 2
-        const DvalH = this.$obj.c1.offsetHeight / 2
+        const halfW = getHalfWidth(this.$obj.c1)
+        const halfH = getHalfHeight(this.$obj.c1)
+        // 修正坐标
         pageX = pageX - offsetLeft - DValX
         pageY = pageY - offsetTop - DValY
 
         if (this.selectedControl) {
-          this.$obj[this.selectedControl].style = `left:${pageX + DValX - DvalW}px;top:${pageY + DValY - DvalH}px`
+          this.$obj[this.selectedControl].style = `left:${pageX + DValX - halfW}px;top:${pageY + DValY - halfH}px`
+
           this.ctx.clearRect(0, 0, 500, 500)
           this.drawSegment()
           this.drawBezierCurveTo()
+          this.calculatePercent()
         }
       },
       false
@@ -46,6 +80,10 @@ class App extends React.Component {
       'mousedown',
       e => {
         e.preventDefault()
+        const type = e.target.getAttribute('contr-type')
+        if (type == 'c2' || type == 'c4') {
+          return
+        }
         this.selectedControl = e.target.getAttribute('contr-type')
       },
       false
@@ -63,41 +101,84 @@ class App extends React.Component {
 
   drawBezierCurveTo() {
     const { $obj, ctx } = this
-    const { offsetWidth, offsetHeight } = $obj.c1
-
+    const halfWidth = getHalfWidth($obj.c1)
+    const halfHeight = getHalfHeight($obj.c1)
     ctx.beginPath()
-    ctx.moveTo($obj.c2.offsetLeft + offsetWidth / 2, $obj.c2.offsetTop + offsetHeight / 2)
+    ctx.moveTo($obj.c2.offsetLeft + halfWidth, $obj.c2.offsetTop + halfHeight)
     ctx.bezierCurveTo(
-      $obj.c1.offsetLeft + offsetWidth / 2,
-      $obj.c1.offsetTop + offsetHeight / 2,
-      $obj.c3.offsetLeft + offsetWidth / 2,
-      $obj.c3.offsetTop + offsetHeight / 2,
-      $obj.c4.offsetLeft + offsetWidth / 2,
-      $obj.c4.offsetTop + offsetHeight / 2
+      $obj.c1.offsetLeft + halfWidth,
+      $obj.c1.offsetTop + halfHeight,
+      $obj.c3.offsetLeft + halfWidth,
+      $obj.c3.offsetTop + halfHeight,
+      $obj.c4.offsetLeft + halfWidth,
+      $obj.c4.offsetTop + halfHeight
     )
     ctx.lineWidth = 5 //线条的宽度
     ctx.strokeStyle = '#ff89ac' //线条的颜色
     ctx.stroke()
     // todo 这里需要根据坐标计算贝塞尔值
   }
-
+  drawLine(x, y, x2, y2, color) {
+    if (!color) {
+      color = '#FCE811'
+    }
+    const { ctx } = this
+    ctx.beginPath()
+    ctx.moveTo(x, y)
+    ctx.lineTo(x2, y2)
+    ctx.lineWidth = 3 //线条的宽度
+    ctx.strokeStyle = color //线条的颜色
+    ctx.stroke()
+  }
   drawSegment() {
     const { $obj, ctx } = this
-    const { offsetWidth, offsetHeight } = $obj.c1
+    const halfWidth = getHalfWidth($obj.c1)
+    const halfHeight = getHalfHeight($obj.c1)
 
-    ctx.beginPath()
-    ctx.moveTo($obj.c2.offsetLeft + offsetWidth / 2, $obj.c2.offsetTop + offsetHeight / 2)
-    ctx.lineTo($obj.c1.offsetLeft + offsetWidth / 2, $obj.c1.offsetTop + offsetHeight / 2)
-    ctx.lineWidth = 3 //线条的宽度
-    ctx.strokeStyle = '#FCE811' //线条的颜色
-    ctx.stroke()
+    this.drawLine(
+      $obj.c2.offsetLeft + halfWidth,
+      $obj.c2.offsetTop + halfHeight,
+      $obj.c1.offsetLeft + halfWidth,
+      $obj.c1.offsetTop + halfHeight
+    )
     // 画另外一条控制线
-    ctx.beginPath()
-    ctx.moveTo($obj.c3.offsetLeft + offsetWidth / 2, $obj.c3.offsetTop + offsetHeight / 2)
-    ctx.lineTo($obj.c4.offsetLeft + offsetWidth / 2, $obj.c4.offsetTop + offsetHeight / 2)
-    ctx.lineWidth = 3 //线条的宽度
-    ctx.strokeStyle = '#FCE811' //线条的颜色
-    ctx.stroke()
+    this.drawLine(
+      $obj.c3.offsetLeft + halfWidth,
+      $obj.c3.offsetTop + halfHeight,
+      $obj.c4.offsetLeft + halfWidth,
+      $obj.c4.offsetTop + halfHeight,
+      '#31BEED'
+    )
+  }
+
+  calculatePercent() {
+    const { $obj } = this
+    const coordinateW = getHalfWidth(this.$canvas)
+    const coordinateH = getHalfHeight(this.$canvas)
+
+    const DValX = coordinateW / 2
+    const DValY = coordinateH / 2
+
+    const pointHalfWidth = getHalfWidth($obj.c1)
+    const pointHalfHeight = getHalfWidth($obj.c1)
+
+    console.log(($obj.c1.offsetLeft - DValX + pointHalfWidth) / coordinateW)
+    this.setState({
+      pointer: {
+        x: ($obj.c3.offsetLeft - DValX + pointHalfWidth) / coordinateW,
+        y: ($obj.c3.offsetTop - DValY + pointHalfHeight) / coordinateH,
+        x1: ($obj.c1.offsetLeft - DValX + pointHalfWidth) / coordinateW,
+        y1: ($obj.c1.offsetTop - DValY + pointHalfHeight) / coordinateH,
+      },
+    })
+  }
+
+  handleCopy = () => {
+    const copystatement = this.inputCopy.current
+    copystatement.select()
+    copystatement.setSelectionRange(0, 99999)
+    document.execCommand('copy')
+    alert('copy!')
   }
 
   render() {
@@ -105,30 +186,27 @@ class App extends React.Component {
       <div className="App">
         <div className="sidebar">
           <div className="output">
-            <span>cubic-bezier(0.5, 0.5, 0.5, 0.5)</span>
-            <em className="btn">复制</em>
+            <span className="output-span">
+              cubic-bezier(
+              <em>{this.state.pointer.x.toFixed(2)}</em>,<em>{this.state.pointer.y.toFixed(2)}</em>,
+              <span>{this.state.pointer.x1.toFixed(2)}</span>,<span>{this.state.pointer.y1.toFixed(2)}</span>)
+            </span>
+            <input
+              ref={this.inputCopy}
+              type="text"
+              id="copyInput"
+              value={`cubic-bezier(${this.state.pointer.x.toFixed(2)},${this.state.pointer.y.toFixed(2)},${this.state.pointer.x1.toFixed(2)},${this.state.pointer.y1.toFixed(2)})`}
+            />
+            <em className="btn" onClick={this.handleCopy}>
+              复制
+            </em>
           </div>
           <div className="preset">
             <div className="title">
               <span>预设</span>
-              <em className="btn">复制</em>
+              <em className="btn" onClick={this.handleCopy}>复制</em>
             </div>
             <ul className="preset-ul">
-              <li className="preset-item">
-                <em className="is-checked"></em>
-              </li>
-              <li className="preset-item">
-                <em className="is-checked"></em>
-              </li>
-              <li className="preset-item">
-                <em className="is-checked"></em>
-              </li>
-              <li className="preset-item">
-                <em className="is-checked"></em>
-              </li>
-              <li className="preset-item">
-                <em className="is-checked"></em>
-              </li>
               <li className="preset-item">
                 <em className="is-checked"></em>
               </li>
@@ -139,8 +217,7 @@ class App extends React.Component {
         <div className="stage">
           <div className="title">
             <span>控制器</span>
-            <em className="btn">复制</em>
-            <em className="btn btn1">重置控制点(2,4)</em>
+            <em className="btn" onClick={this.handleCopy}>复制</em>
           </div>
           <div className="canvas-w">
             <div className="canvas" ref={this.canvasRef}>
