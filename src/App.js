@@ -162,13 +162,19 @@ class App extends React.Component {
     const pointHalfWidth = getHalfWidth($obj.c1)
     const pointHalfHeight = getHalfWidth($obj.c1)
 
-    console.log(($obj.c1.offsetLeft - DValX + pointHalfWidth) / coordinateW)
+    // 坐标采用数学坐标系，获取真实的 x,y，因为网页中y轴和数学中的 y 轴是逆向关系，所以 y 需要转换为数学坐标系的 y
+    const { c3RealX, c3RealY, c1RealX, c1RealY } = {
+      c3RealX: $obj.c3.offsetLeft - DValX + pointHalfWidth,
+      c3RealY: coordinateH - ($obj.c3.offsetTop - DValY + pointHalfHeight),
+      c1RealX: $obj.c1.offsetLeft - DValX + pointHalfWidth,
+      c1RealY: coordinateH - ($obj.c1.offsetTop - DValY + pointHalfHeight),
+    }
     this.setState({
       pointer: {
-        x: ($obj.c3.offsetLeft - DValX + pointHalfWidth) / coordinateW,
-        y: ($obj.c3.offsetTop - DValY + pointHalfHeight) / coordinateH,
-        x1: ($obj.c1.offsetLeft - DValX + pointHalfWidth) / coordinateW,
-        y1: ($obj.c1.offsetTop - DValY + pointHalfHeight) / coordinateH,
+        x: c3RealX / coordinateW,
+        y: c3RealY / coordinateH,
+        x1: c1RealX / coordinateW,
+        y1: c1RealY / coordinateH,
       },
     })
   }
@@ -187,55 +193,63 @@ class App extends React.Component {
         <div className="sidebar">
           <div className="output">
             <span className="output-span">
-              cubic-bezier(
+              <code>cubic-bezier(
               <em>{this.state.pointer.x.toFixed(2)}</em>,<em>{this.state.pointer.y.toFixed(2)}</em>,
-              <span>{this.state.pointer.x1.toFixed(2)}</span>,<span>{this.state.pointer.y1.toFixed(2)}</span>)
+              <span>{this.state.pointer.x1.toFixed(2)}</span>,<span>{this.state.pointer.y1.toFixed(2)}</span>)</code>
             </span>
             <input
               ref={this.inputCopy}
               type="text"
               id="copyInput"
-              value={`cubic-bezier(${this.state.pointer.x.toFixed(2)},${this.state.pointer.y.toFixed(2)},${this.state.pointer.x1.toFixed(2)},${this.state.pointer.y1.toFixed(2)})`}
+              value={`cubic-bezier(${this.state.pointer.x.toFixed(2)},${this.state.pointer.y.toFixed(
+                2
+              )},${this.state.pointer.x1.toFixed(2)},${this.state.pointer.y1.toFixed(2)})`}
             />
             <em className="btn" onClick={this.handleCopy}>
               复制
             </em>
           </div>
-          <div className="preset">
+          {/*<div className="preset">
             <div className="title">
               <span>预设</span>
-              <em className="btn" onClick={this.handleCopy}>复制</em>
+              <em className="btn" onClick={this.handleCopy}>
+                复制
+              </em>
             </div>
             <ul className="preset-ul">
               <li className="preset-item">
                 <em className="is-checked"></em>
               </li>
             </ul>
-          </div>
-        </div>
-
-        <div className="stage">
-          <div className="title">
-            <span>控制器</span>
-            <em className="btn" onClick={this.handleCopy}>复制</em>
-          </div>
-          <div className="canvas-w">
-            <div className="canvas" ref={this.canvasRef}>
-              <button className="contr c1" contr-type="c1">
-                1
-              </button>
-              <button className="contr c2" contr-type="c2">
-                2
-              </button>
-              <button className="contr c3" contr-type="c3">
-                3
-              </button>
-              <button className="contr c4" contr-type="c4">
-                4
-              </button>
-              <canvas id="canvas" width="500" height="500"></canvas>
+          </div>*/}
+          <div className="stage">
+            <div className="title">
+              <span>控制器</span>
+              <em className="btn" onClick={this.handleCopy}>
+                复制
+              </em>
+            </div>
+            <div className="canvas-w">
+              <div className="canvas" ref={this.canvasRef}>
+                <button className="contr c1" contr-type="c1">
+                  1
+                </button>
+                <button className="contr c2" contr-type="c2">
+                  2
+                </button>
+                <button className="contr c3" contr-type="c3">
+                  3
+                </button>
+                <button className="contr c4" contr-type="c4">
+                  4
+                </button>
+                <canvas id="canvas" width="500" height="500"></canvas>
+              </div>
             </div>
           </div>
+        </div>
+        <div className="animation-stage">
+            <div className="water" style={{transition: `transform cubic-bezier(${this.state.pointer.x.toFixed(2)},${this.state.pointer.y.toFixed(2)},${this.state.pointer.x1.toFixed(2)},${this.state.pointer.y1.toFixed(2)}) 3s`}}></div>
         </div>
       </div>
     )
